@@ -1,0 +1,84 @@
+﻿@page "/OsnovniGradniki"
+<h3 style="color:red">Osnovni Gradniki</h3>
+
+<h2 style="color: @barva">Pozdravljeni, @naziv</h2>
+<br />
+<h2>Pozdravljeni, @((MarkupString)naziv)</h2>
+<br />
+Vnesite ime:
+<input type="text" placeholder="vnos besedila" @bind="@naziv" />
+
+<br />
+<br />
+
+<button class="btn btn-primary" @onclick="povecajStevec">Povečaj števec</button>
+<button class="btn btn-primary" @onclick="(() => stevec=stevec+1)">Povečaj števec Lambda</button>
+<div><span style="color:@barva">Števec ima vrednost: @stevec</span></div>
+
+<br />
+Izberite barvo: 
+<select @bind="barva">
+    <option value="red">Rdeča</option>
+    <option value="blue">Morda</option>
+    <option value="green">Zelena</option>
+</select>
+
+@code {
+    string naziv = "No Body";
+    int stevec = 0;
+    string barva = "red";
+
+    void povecajStevec()
+    {
+        stevec += 1;
+    }
+
+    public class film
+    {
+        public string naziv;
+        public string slika;
+        public string opis;
+    }
+
+    List<film> seznamFilmi = new List<film>();
+
+    protected override void OnInitialized()
+    {
+
+        napolniSeznam();
+
+        base.OnInitialized();
+    }
+
+
+    void napolniSeznam()
+    {
+        seznamFilmi.Add(new film()
+        {
+            naziv = "Boter",
+            slika = "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg",
+            opis = ""
+        });
+        seznamFilmi.Add(new film()
+        {
+            naziv = "Schindlerjev seznam",
+            slika = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOaagLxCVf-QGVg7blBars95RLfb2I9syd9uaLPGeJJKqAo3CbNapAzxzsD7UtlbPUfME&usqp=CAU",
+            opis = ""
+        });
+        seznamFilmi.Add(new film()
+        {
+            naziv = "Gospodar prstanov",
+            slika = "https://i1.wp.com/www.casualoptimist.com/wp-content/uploads/2020/09/fellowship-of-the-ring-illustration-johan-egerkrans.jpg?resize=1000%2C1500",
+            opis = ""
+        });
+        seznamFilmi.Add(new film()
+        {
+            naziv = "Forrest Gump",
+            slika = "https://m.media-amazon.com/images/I/91++WV6FP4L._AC_SL1500_.jpg",
+            opis = ""
+        });
+
+
+    }
+
+}

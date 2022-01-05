@@ -1,0 +1,30 @@
+﻿<div class="d-flex    flex-wrap">
+    @foreach (var tempfilm in seznam)
+    {
+
+        <div class="card" style="width: 18rem;">
+            <img src="@tempfilm.slika" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h3 class="card-title">@tempfilm.naziv</h3>
+                @if (prikaziOpis)
+                {
+                    <p class="card-text">@tempfilm.opis</p>
+                }
+                <div>
+                    <button @onclick="@(() => IzbrisiFilm.InvokeAsync(@tempfilm))">Izbriši</button>
+                </div>
+            </div>
+        </div>
+
+    }
+
+
+</div>
+
+@code {
+    //mora biti public in property
+    [Parameter] public List<film> seznam { get; set; }
+    [Parameter] public bool prikaziOpis { get; set; } = true;
+    [Parameter] public EventCallback<film> IzbrisiFilm { get; set; }
+     
+    }

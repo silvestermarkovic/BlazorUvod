@@ -1,0 +1,144 @@
+﻿@page "/Filmi"
+@using System.Timers
+@implements IDisposable
+<h3>Filmi</h3>
+<input type="checkbox" @bind="prikazujOpis">
+@*foreach (film aa in seznamFilmi)
+{
+    @aa.naziv
+}*@
+<ComSeznamFilmov seznam="@seznamFilmi" prikaziOpis="@prikazujOpis"
+                 IzbrisiFilm="IzbrisiFilmPage"
+                 />
+
+
+
+@code {
+    Timer casovnik;
+
+    List<film> seznamFilmi  = new List<film>();
+    bool prikazujOpis = true;
+
+    void napolniSeznam()
+    {
+        seznamFilmi.Add(new film()
+        {
+            naziv = "Boter",
+            slika = "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg",
+            opis = "of oidsjfodksa jfldsk fjl dsafdsa fdsafdsa fasdfasd Lorem3d sad sa sad4"
+        });
+        seznamFilmi.Add(new film()
+        {
+            naziv = "Schindlerjev seznam",
+            slika = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOaagLxCVf-QGVg7blBars95RLfb2I9syd9uaLPGeJJKqAo3CbNapAzxzsD7UtlbPUfME&usqp=CAU",
+            opis = "of oidsjfodksa jfldsk fjl dsafdsa fdsafdsa fasdfasd Lorem3d sad sa sad4"
+        });
+        seznamFilmi.Add(new film()
+        {
+            naziv = "Gospodar prstanov",
+            slika = "https://i1.wp.com/www.casualoptimist.com/wp-content/uploads/2020/09/fellowship-of-the-ring-illustration-johan-egerkrans.jpg?resize=1000%2C1500",
+            opis = "of oidsjfodksa jfldsk fjl dsafdsa fdsafdsa fasdfasd Lorem3d sad sa sad4"
+        });
+        seznamFilmi.Add(new film()
+        {
+            naziv = "Forrest Gump",
+            slika = "https://m.media-amazon.com/images/I/91++WV6FP4L._AC_SL1500_.jpg",
+            opis = "of oidsjfodksa jfldsk fjl dsafdsa fdsafdsa fasdfasd Lorem3d sad sa sad4"
+        });
+
+
+    }
+
+    void film_dodaj()
+    {
+
+        if (seznamFilmi.Count < 10)
+        {
+            Random rnd = new Random();
+
+            film tempfilm = new film();
+            film tempfilm1 = new film();
+            tempfilm = seznamFilmi[rnd.Next(0, seznamFilmi.Count) - 1];
+            tempfilm1.naziv = tempfilm.naziv + seznamFilmi.Count.ToString();
+            tempfilm1.opis = tempfilm.opis;
+            tempfilm1.slika = tempfilm.slika;
+
+            seznamFilmi.Add(tempfilm1);
+            /* seznamFilmi.Add(new film()
+             {
+                 naziv = "Forrest Gump NOV" + seznamFilmi.Count.ToString(),
+                 slika = "https://m.media-amazon.com/images/I/91++WV6FP4L._AC_SL1500_.jpg",
+                 opis = "of oidsjfodksa jfldsk fjl dsafdsa fdsafdsa fasdfasd Lorem3d sad sa sad4"
+             }); */
+        }
+
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+
+        await Task.Delay(3000);
+
+        napolniSeznam();
+
+        casovnik = new Timer();
+        casovnik.Interval = 3000;
+        casovnik.Elapsed += TimerOnElapsed;
+        casovnik.Start();
+
+
+
+    }
+
+    protected override void OnInitialized()
+    {
+
+
+        /*    napolniSeznam();
+
+            casovnik = new Timer();
+            casovnik.Interval = 3000;
+            casovnik.Elapsed += TimerOnElapsed;
+            casovnik.Start();
+        */
+
+        Console.WriteLine("OnInitialized: Filmi Count:" + seznamFilmi.Count.ToString());
+    }
+
+    protected override void OnParametersSet()
+    {
+        Console.WriteLine("OnParametersSet: Filmi Count:" + seznamFilmi.Count.ToString());
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        Console.WriteLine("OnAfterRender: Filmi Count:" + seznamFilmi.Count.ToString());
+    }
+    protected override bool ShouldRender()
+    {
+        return true;
+    }
+
+
+    private void TimerOnElapsed(object sender, ElapsedEventArgs e)
+    {
+        film_dodaj();
+
+        //ker se Timer izvaja v ozadju moramo osvežiti stran
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        if (casovnik != null)
+        {
+            casovnik.Dispose();
+        }
+    }
+
+    private void IzbrisiFilmPage(film filzZaIzbris)
+    {
+        seznamFilmi.Remove(filzZaIzbris);
+    }
+
+}
